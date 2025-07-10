@@ -3,15 +3,24 @@ from bot_handler import bot
 from session_manager import get_session_clients
 from tagger import start_tagger
 
-async def main():
-    await bot.start()
-
+async def start_all():
     clients = get_session_clients()
+    
+    # Start userbot sessions
     for client in clients:
         await client.start()
-        print(f"Started session: {client.session.save()}")
+        print(f"✅ Started user session: {client.session.save()}")
 
-    print("Bot and userbots running...")
-    await asyncio.gather(bot.run_until_disconnected(), *[client.run_until_disconnected() for client in clients])
+    # Run both bot and userbots
+    await asyncio.gather(
+        bot.run_until_disconnected(),
+        *[client.run_until_disconnected() for client in clients]
+    )
 
-asyncio.run(main())
+if __name__ == "__main__":
+    print("🚀 Starting bot and user sessions...")
+    
+    try:
+        asyncio.get_event_loop().run_until_complete(start_all())
+    except KeyboardInterrupt:
+        print("🛑 Exiting due to keyboard interrupt.")
