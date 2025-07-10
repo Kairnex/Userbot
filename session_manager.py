@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from config import MONGO_URI, SESSION_COLLECTION, API_ID, API_HASH
 
 client = MongoClient(MONGO_URI)
-db = client.get_database()
+db = client["string_sessions"]  
 col = db[SESSION_COLLECTION]
 
 def save_session_string(session_string: str):
